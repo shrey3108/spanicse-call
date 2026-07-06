@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dental Clinic - AI Receptionist</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 24px;
+            padding: 48px 32px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
+            border-radius: 20px;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo svg { width: 44px; height: 44px; fill: #fff; }
+
+        h1 {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 36px;
+            line-height: 1.5;
+        }
+
+        .call-btn {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(34,197,94,0.4);
+        }
+
+        .call-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 28px rgba(34,197,94,0.5);
+        }
+
+        .call-btn:active { transform: scale(0.96); }
+
+        .call-btn svg { width: 40px; height: 40px; fill: #fff; }
+
+        .call-btn.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 4px 20px rgba(239,68,68,0.4);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .call-btn.active:hover {
+            box-shadow: 0 6px 28px rgba(239,68,68,0.5);
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 20px rgba(239,68,68,0.4); }
+            50% { box-shadow: 0 4px 32px rgba(239,68,68,0.6); }
+        }
+
+        .btn-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .status {
+            margin-top: 28px;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status.connecting {
+            display: block;
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.connected {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .transcript {
+            margin-top: 20px;
+            text-align: left;
+            max-height: 240px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .transcript.show { display: block; }
+
+        .transcript-msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            font-size: 13px;
+            line-height: 1.5;
+            max-width: 85%;
+        }
+
+        .transcript-msg.assistant {
+            background: #eff6ff;
+            color: #1e40af;
+            margin-right: auto;
+        }
+
+        .transcript-msg.user {
+            background: #f0fdf4;
+            color: #166534;
+            margin-left: auto;
+        }
+
+        .volume-bar {
+            margin-top: 16px;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .volume-bar.show { display: block; }
+
+        .volume-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #22c55e, #16a34a);
+            border-radius: 4px;
+            transition: width 0.1s;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .feature {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .feature-icon { font-size: 24px; margin-bottom: 6px; }
+
+        .feature-text {
+            font-size: 12px;
+            color: #475569;
+            font-weight: 500;
+        }
+
+        .powered {
+            margin-top: 32px;
+            font-size: 12px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="logo">
+                <svg viewBox="0 0 24 24"><path d="M12 2C9.24 2 7 4.24 7 7v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7c0-2.76-2.24-5-5-5zm-1.5 3.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V9h-3V5.5zM12 17a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg>
+            </div>
+            <h1 id="clinicName">Dental Clinic</h1>
+            <p class="subtitle">Talk to our AI receptionist to book an appointment or ask about our services</p>
+
+            <button class="call-btn" id="callBtn" onclick="toggleCall()">
+                <svg id="phoneIcon" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1v3.49a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z"/></svg>
+                <svg id="endIcon" viewBox="0 0 24 24" style="display:none"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.28c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1 0-1.36C3.57 8.55 7.58 7 12 7s8.43 1.55 11.71 4.72c.18.18.29.44.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.1-.7-.28-.79-.73-1.68-1.36-2.66-1.85a.994.994 0 0 1-.56-.9V9.72C14.15 9.25 13.6 9 12 9z"/></svg>
+            </button>
+            <p class="btn-label" id="btnLabel">Tap to start call</p>
+
+            <div class="volume-bar" id="volumeBar">
+                <div class="volume-fill" id="volumeFill"></div>
+            </div>
+
+            <div class="status" id="status"></div>
+
+            <div class="transcript" id="transcript"></div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">📅</div>
+                    <div class="feature-text">Book Appointments</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🦷</div>
+                    <div class="feature-text">Treatment Info</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">⏰</div>
+                    <div class="feature-text">Check Availability</div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌐</div>
+                    <div class="feature-text">English</div>
+                </div>
+            </div>
+        </div>
+
+        <p class="powered">Powered by AI Voice Assistant</p>
+    </div>
+
+    <script type="module">
+        import Vapi from "https://esm.sh/@vapi-ai/web";
+        // =====================================================
+        //  CONFIGURE THESE VALUES
+        // =====================================================
+        const VAPI_PUBLIC_KEY = "e4257f6c-fc6a-4269-90eb-82916bc89414";      // Vapi Dashboard → Account → Public Key
+        const VAPI_ASSISTANT_ID = "f84a52d3-01f8-478c-a224-7efaa894d94e";  // Vapi Dashboard → Assistant → ID
+        // =====================================================
+
+        const vapi = new Vapi(VAPI_PUBLIC_KEY);
+        let isCallActive = false;
+        let isConnecting = false;
+
+        const callBtn = document.getElementById("callBtn");
+        const btnLabel = document.getElementById("btnLabel");
+        const phoneIcon = document.getElementById("phoneIcon");
+        const endIcon = document.getElementById("endIcon");
+        const statusEl = document.getElementById("status");
+        const transcriptEl = document.getElementById("transcript");
+        const volumeBar = document.getElementById("volumeBar");
+        const volumeFill = document.getElementById("volumeFill");
+
+        function setStatus(text, type) {
+            statusEl.textContent = text;
+            statusEl.className = "status " + type;
+        }
+
+        function addTranscript(role, text) {
+            transcriptEl.classList.add("show");
+            const msg = document.createElement("div");
+            msg.className = "transcript-msg " + role;
+            msg.textContent = text;
+            transcriptEl.appendChild(msg);
+            transcriptEl.scrollTop = transcriptEl.scrollHeight;
+        }
+
+        function handleCallEndState() {
+            isCallActive = false;
+            isConnecting = false;
+            callBtn.classList.remove("active");
+            phoneIcon.style.display = "block";
+            endIcon.style.display = "none";
+            btnLabel.textContent = "Tap to start call";
+            volumeBar.classList.remove("show");
+            if (!statusEl.classList.contains("error")) {
+                statusEl.className = "status";
+            }
+        }
+
+        function toggleCall() {
+            if (isCallActive || isConnecting) {
+                vapi.stop();
+                handleCallEndState();
+            } else {
+                isConnecting = true;
+                
+                // Immediately show connecting UI (turns red/active with end call button)
+                callBtn.classList.add("active");
+                phoneIcon.style.display = "none";
+                endIcon.style.display = "block";
+                btnLabel.textContent = "Tap to end call";
+                setStatus("Connecting...", "connecting");
+                
+                vapi.start(VAPI_ASSISTANT_ID);
+            }
+        }
+        window.toggleCall = toggleCall;
+
+        vapi.on("call-start", () => {
+            isCallActive = true;
+            isConnecting = false;
+            volumeBar.classList.add("show");
+            setStatus("Connected — start speaking", "connected");
+        });
+
+        vapi.on("call-end", () => {
+            handleCallEndState();
+        });
+
+        vapi.on("speech-start", () => {
+            setStatus("Assistant is speaking...", "connected");
+        });
+
+        vapi.on("speech-end", () => {
+            setStatus("Listening...", "connected");
+        });
+
+        vapi.on("volume-level", (level) => {
+            volumeFill.style.width = (level * 100) + "%";
+        });
+
+        vapi.on("message", (msg) => {
+            if (msg.type === "transcript") {
+                if (msg.transcriptType === "final") {
+                    addTranscript(msg.role, msg.transcript);
+                }
+            }
+        });
+
+        vapi.on("error", (err) => {
+            console.error("Vapi error:", err);
+            setStatus("Connection error. Please try again.", "error");
+            handleCallEndState();
+            setTimeout(() => {
+                if (!isCallActive && !isConnecting) {
+                    statusEl.className = "status";
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
