@@ -1,0 +1,141 @@
+[
+  {
+    "type": "function",
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Let me check the available slots for you..."
+      },
+      {
+        "type": "request-failed",
+        "content": "I'm sorry, I wasn't able to check availability right now. Can you try calling back in a few minutes?"
+      }
+    ],
+    "function": {
+      "name": "checkAvailability",
+      "description": "Check available appointment slots for a specific date at the dental clinic",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "The date to check availability for, in YYYY-MM-DD format"
+          }
+        },
+        "required": ["date"]
+      }
+    },
+    "server": {
+      "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+      "timeoutSeconds": 30
+    }
+  },
+  {
+    "type": "function",
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Booking your appointment now..."
+      },
+      {
+        "type": "request-failed",
+        "content": "I'm sorry, I couldn't complete the booking. Let me save your details and our team will call you back to confirm."
+      }
+    ],
+    "function": {
+      "name": "bookAppointment",
+      "description": "Book a dental appointment for the caller on a specific date and time",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "patientName": {
+            "type": "string",
+            "description": "Full name of the patient"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Contact phone number of the patient"
+          },
+          "date": {
+            "type": "string",
+            "description": "Appointment date in YYYY-MM-DD format"
+          },
+          "time": {
+            "type": "string",
+            "description": "Appointment time in HH:MM format (24-hour)"
+          },
+          "treatment": {
+            "type": "string",
+            "description": "Type of dental treatment or reason for visit"
+          },
+          "isNewPatient": {
+            "type": "boolean",
+            "description": "Whether this is a new patient or returning patient"
+          }
+        },
+        "required": ["patientName", "phoneNumber", "date", "time", "treatment"]
+      }
+    },
+    "server": {
+      "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+      "timeoutSeconds": 30
+    }
+  },
+  {
+    "type": "function",
+    "messages": [
+      {
+        "type": "request-start",
+        "content": "Let me save your details..."
+      },
+      {
+        "type": "request-failed",
+        "content": "I apologize, I had trouble saving your information. Could you please call back?"
+      }
+    ],
+    "function": {
+      "name": "saveLeadInfo",
+      "description": "Save the caller's information and lead qualification details for follow-up",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "patientName": {
+            "type": "string",
+            "description": "Full name of the caller"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Contact phone number"
+          },
+          "treatment": {
+            "type": "string",
+            "description": "Treatment or service they are interested in"
+          },
+          "urgency": {
+            "type": "string",
+            "enum": ["urgent", "routine", "just_enquiry"],
+            "description": "How urgent their need is"
+          },
+          "leadScore": {
+            "type": "string",
+            "enum": ["hot", "warm", "cold"],
+            "description": "Lead qualification score based on conversation"
+          },
+          "isNewPatient": {
+            "type": "boolean",
+            "description": "Whether this is a new or returning patient"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Any additional notes from the conversation"
+          }
+        },
+        "required": ["patientName", "phoneNumber", "treatment", "leadScore"]
+      }
+    },
+    "server": {
+      "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+      "timeoutSeconds": 30
+    }
+  }
+]

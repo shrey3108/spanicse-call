@@ -1,0 +1,127 @@
+# VAPI Tools Setup — Teeno Tools
+
+Server URL (teeno mein naya link paste karein):
+https://shreyshukla.app.n8n.cloud/webhook/vapi-dental
+
+==================================================
+TOOL 1 — checkAvailability
+==================================================
+
+Name:
+checkAvailability
+
+Description:
+Check available appointment slots for a specific date at the dental clinic / medical center
+
+Parameters:
+{
+  "type": "object",
+  "properties": {
+    "date": {
+      "type": "string",
+      "description": "The date to check availability for, in YYYY-MM-DD format"
+    }
+  },
+  "required": ["date"]
+}
+
+Server URL:
+https://shreyshukla.app.n8n.cloud/webhook/vapi-dental
+
+
+==================================================
+TOOL 2 — bookAppointment
+==================================================
+
+Name:
+bookAppointment
+
+Description:
+Book an appointment for the caller on a specific date and time
+
+Parameters:
+{
+  "type": "object",
+  "properties": {
+    "patientName": {
+      "type": "string",
+      "description": "Full name of the patient"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "description": "Contact phone number of the patient"
+    },
+    "date": {
+      "type": "string",
+      "description": "Appointment date in YYYY-MM-DD format"
+    },
+    "time": {
+      "type": "string",
+      "description": "Appointment time in HH:MM format (24-hour)"
+    },
+    "treatment": {
+      "type": "string",
+      "description": "Type of treatment or reason for visit"
+    },
+    "isNewPatient": {
+      "type": "boolean",
+      "description": "Whether this is a new patient or returning patient"
+    }
+  },
+  "required": ["patientName", "phoneNumber", "date", "time", "treatment"]
+}
+
+Server URL:
+https://shreyshukla.app.n8n.cloud/webhook/vapi-dental
+
+
+==================================================
+TOOL 3 — saveLeadInfo
+==================================================
+
+Name:
+saveLeadInfo
+
+Description:
+Save the caller's information and lead qualification details for follow-up
+
+Parameters:
+{
+  "type": "object",
+  "properties": {
+    "patientName": {
+      "type": "string",
+      "description": "Full name of the caller"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "treatment": {
+      "type": "string",
+      "description": "Treatment or service they are interested in"
+    },
+    "urgency": {
+      "type": "string",
+      "enum": ["urgent", "routine", "just_enquiry"],
+      "description": "How urgent their need is"
+    },
+    "leadScore": {
+      "type": "string",
+      "enum": ["hot", "warm", "cold"],
+      "description": "Lead qualification score based on conversation"
+    },
+    "isNewPatient": {
+      "type": "boolean",
+      "description": "Whether this is a new or returning patient"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Any additional notes from the conversation"
+    }
+  },
+  "required": ["patientName", "phoneNumber", "treatment", "leadScore"]
+}
+
+Server URL:
+https://shreyshukla.app.n8n.cloud/webhook/vapi-dental

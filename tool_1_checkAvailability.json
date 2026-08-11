@@ -1,0 +1,31 @@
+{
+  "type": "function",
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Let me check the available slots for you..."
+    },
+    {
+      "type": "request-failed",
+      "content": "I'm sorry, I wasn't able to check availability right now. Can you try calling back in a few minutes?"
+    }
+  ],
+  "function": {
+    "name": "checkAvailability",
+    "description": "Check available appointment slots for a specific date at the dental clinic",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "The date to check availability for, in YYYY-MM-DD format"
+        }
+      },
+      "required": ["date"]
+    }
+  },
+  "server": {
+    "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+    "timeoutSeconds": 30
+  }
+}

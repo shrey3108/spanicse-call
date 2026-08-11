@@ -1,0 +1,51 @@
+{
+  "type": "function",
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Booking your appointment now..."
+    },
+    {
+      "type": "request-failed",
+      "content": "I'm sorry, I couldn't complete the booking. Let me save your details and our team will call you back to confirm."
+    }
+  ],
+  "function": {
+    "name": "bookAppointment",
+    "description": "Book a dental appointment for the caller on a specific date and time",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "patientName": {
+          "type": "string",
+          "description": "Full name of the patient"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Contact phone number of the patient"
+        },
+        "date": {
+          "type": "string",
+          "description": "Appointment date in YYYY-MM-DD format"
+        },
+        "time": {
+          "type": "string",
+          "description": "Appointment time in HH:MM format (24-hour)"
+        },
+        "treatment": {
+          "type": "string",
+          "description": "Type of dental treatment or reason for visit"
+        },
+        "isNewPatient": {
+          "type": "boolean",
+          "description": "Whether this is a new patient or returning patient"
+        }
+      },
+      "required": ["patientName", "phoneNumber", "date", "time", "treatment"]
+    }
+  },
+  "server": {
+    "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+    "timeoutSeconds": 30
+  }
+}

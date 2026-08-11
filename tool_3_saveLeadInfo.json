@@ -1,0 +1,57 @@
+{
+  "type": "function",
+  "messages": [
+    {
+      "type": "request-start",
+      "content": "Let me save your details..."
+    },
+    {
+      "type": "request-failed",
+      "content": "I apologize, I had trouble saving your information. Could you please call back?"
+    }
+  ],
+  "function": {
+    "name": "saveLeadInfo",
+    "description": "Save the caller's information and lead qualification details for follow-up",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "patientName": {
+          "type": "string",
+          "description": "Full name of the caller"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Contact phone number"
+        },
+        "treatment": {
+          "type": "string",
+          "description": "Treatment or service they are interested in"
+        },
+        "urgency": {
+          "type": "string",
+          "enum": ["urgent", "routine", "just_enquiry"],
+          "description": "How urgent their need is"
+        },
+        "leadScore": {
+          "type": "string",
+          "enum": ["hot", "warm", "cold"],
+          "description": "Lead qualification score based on conversation"
+        },
+        "isNewPatient": {
+          "type": "boolean",
+          "description": "Whether this is a new or returning patient"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Any additional notes from the conversation"
+        }
+      },
+      "required": ["patientName", "phoneNumber", "treatment", "leadScore"]
+    }
+  },
+  "server": {
+    "url": "https://sshhh.app.n8n.cloud/webhook/vapi-dental",
+    "timeoutSeconds": 30
+  }
+}
