@@ -894,9 +894,11 @@
             statusPill.className = "status-pill connecting";
             statusText.textContent = "Connecting to AI Agent...";
 
-            // Dynamically override Vapi assistant options with selected Industry System Prompt
+            // Dynamically override Vapi assistant options with selected Industry System Prompt & First Message Greeting
             const indData = industryData[currentIndustry];
+            const firstGreeting = indData ? `Hello! Thank you for calling ${indData.title}. How can I help you today?` : undefined;
             const assistantOverrides = {
+                firstMessage: firstGreeting,
                 model: {
                     provider: "openai",
                     model: "gpt-4o-mini",
