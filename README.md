@@ -1,48 +1,49 @@
-# Dental Clinic - AI Receptionist Web Interface
+# OmniAI — Universal Multi-Industry AI Voice Receptionist Showcase
 
-A premium, modern web interface for the Dental Clinic AI Receptionist. This application integrates directly with the Vapi Voice AI SDK to allow patients to have real-time voice conversations with an AI receptionist to book appointments, check slot availability, and request callbacks.
+A state-of-the-art, interactive web application and demo showcase for AI Voice Receptionists across **5 major industry verticals**. Built with Vanilla JS, frosted glassmorphic UI, real-time sound-reactive 3D voice orb, live transcription stream, and n8n webhook integrations.
 
-## Features
-- 📞 **Direct Voice Call Integration:** Start and end real-time voice calls with the Vapi Assistant.
-- 🎙️ **Live Volume Visualization:** A dynamic volume bar showing microphone levels during calls.
-- 💬 **Live Transcript Display:** Real-time text transcription of what the patient and the assistant say.
-- ⚡ **Highly Responsive UI:** Custom animations and status notifications (Connecting, Listening, Speaking).
-- 🌐 **Responsive Design:** Completely optimized for both mobile and desktop viewports.
+---
 
-## Tech Stack
-- **Frontend:** HTML5, Vanilla CSS3 (modern styling, clean visual hierarchy)
-- **SDK:** `@vapi-ai/web` (loaded via ES Modules)
+## 🌟 Demo Features
 
-## Getting Started
+### 5 Built-in Industry Personas:
+1. 🩺 **Medical & Dental Clinic**: Appointments, toothache/routine care, doctor availability.
+2. 🛠️ **Home Services & Maintenance**: 24/7 Plumber, Electrician, Carpenter & HVAC technician dispatch.
+3. 🍽️ **Restaurant & Lounge**: Table reservations, party sizes, outdoor seating, private event inquiries.
+4. 🚗 **Car Dealership & Auto Workshop**: SUV test drive bookings, routine car service & repairs.
+5. 🏢 **General Corporate Receptionist**: Universal lead qualification, FAQ response & callback booking.
 
-### 1. Configuration
-Open `index.html` and configure your Vapi credentials:
-```javascript
-// index.html (Lines 261-262)
-const VAPI_PUBLIC_KEY = "your-vapi-public-key";
-const VAPI_ASSISTANT_ID = "your-vapi-assistant-id";
-```
+### Interactive UI Highlights:
+- 🎙️ **Sound-Reactive 3D AI Voice Orb**: Scaled smoothly in real-time by micro-volume input from `@vapi-ai/web`.
+- 🎨 **Dynamic Industry Theming**: Instant color, logo, prompt chips, and badge transitions when switching personas.
+- 💬 **Live Transcript Stream**: Chat bubbles with auto-scroll and role badges for Assistant & Caller.
+- 📊 **Real-Time Intelligence Bar**: Live metric cards tracking Lead Qualification Score (`HOT 🔥`, `WARM ⚡`, `COLD ❄️`), Detected Language (English, Spanish, Hindi), Tool Executions, and Call Duration.
+- 💡 **Sample Conversation Chips**: One-click sample prompt starters for client demos.
+- ⚙️ **Credentials Modal**: On-the-fly Vapi Public Key & Assistant ID configuration saved in browser `localStorage`.
 
-### 2. Local Hosting (Mandatory for Microphone Access)
-Due to browser security protocols, features like **microphone access** and **AudioWorklets** (used for voice noise filtering) are blocked on direct local files (`file://`). You must host this on a local or remote web server.
+---
 
-#### Option A: Node.js (npx)
-Run the following command in the folder:
-```bash
-npx http-server -p 8080
-```
-Then visit `http://localhost:8080` in your browser.
+## 📁 Repository Structure
 
-#### Option B: VS Code Live Server
-1. Install the **"Live Server"** extension in VS Code.
-2. Right-click `index.html` and select **"Open with Live Server"**.
+- `index.html` — The main multi-industry web application & demo showcase.
+- `industry_prompts.json` — System prompt configs, themes, and quick-prompt chips for all 5 industries.
+- `vapi_tools.json` — Tool schemas (`checkAvailability`, `bookAppointment`, `saveLeadInfo`) compatible with multi-industry payloads.
+- `vapi_prompt.txt` — Full system prompt documentation for all 5 business personas.
+- `n8n_workflow.json` — The n8n backend workflow for Google Calendar and Google Sheet lead recording.
+- `SETUP_GUIDE.md` — Guide on configuring n8n and Vapi for production deployment.
 
-#### Option C: Python
-Run:
-```bash
-python -m http.server 8000
-```
-Then visit `http://localhost:8000`.
+---
 
-## Production Deployment
-You can deploy this static interface for free on platforms like **Netlify**, **Vercel**, or **GitHub Pages**. Ensure the hosted URL uses `https://` so the browser permits microphone permissions.
+## 🚀 Quick Start (Local Hosting)
+
+1. Open terminal in project folder.
+2. Start local web server:
+   ```bash
+   npx http-server -p 8080
+   ```
+   *or*
+   ```bash
+   python -m http.server 8000
+   ```
+3. Open `http://localhost:8080` in your browser.
+4. Click top industry pills to switch personas or click the ⚙️ icon to enter custom Vapi API credentials.

@@ -4,403 +4,1088 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multilingual Assistant - ABC Medical Center</title>
+    <title>OmniAI Voice Receptionist — Universal Multi-Industry AI Showcase</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-base: #07090e;
+            --bg-card: rgba(18, 24, 38, 0.75);
+            --border-glass: rgba(255, 255, 255, 0.12);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #06b6d4;
+            --accent-gradient: linear-gradient(135deg, #06b6d4, #10b981);
+            --glow-color: rgba(6, 182, 212, 0.35);
+            --radius-xl: 28px;
+            --radius-lg: 18px;
+            --radius-md: 12px;
+            --shadow-glow: 0 0 50px var(--glow-color);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #f0f4f8;
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            padding: 24px 16px 40px;
+            overflow-x: hidden;
+            position: relative;
         }
 
-        .container {
-            max-width: 480px;
-            width: 90%;
+        /* Ambient Glowing Backdrop Blobs */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.45;
+            z-index: 0;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .blob-1 {
+            top: -100px;
+            left: -100px;
+            width: 450px;
+            height: 450px;
+            background: var(--accent-primary);
+        }
+
+        .blob-2 {
+            bottom: -150px;
+            right: -100px;
+            width: 550px;
+            height: 550px;
+            background: #6366f1;
+        }
+
+        .app-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Header Navigation & Industry Tabs */
+        header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
             text-align: center;
         }
 
-        .card {
-            background: #fff;
-            border-radius: 24px;
-            padding: 48px 32px;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
-        }
-
-        .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, #0ea5e9, #0284c7);
-            border-radius: 20px;
-            margin: 0 auto 24px;
-            display: flex;
+        .brand-badge {
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .logo svg {
-            width: 44px;
-            height: 44px;
-            fill: #fff;
-        }
-
-        h1 {
-            font-size: 24px;
-            color: #1e293b;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .subtitle {
-            color: #64748b;
-            font-size: 15px;
-            margin-bottom: 36px;
-            line-height: 1.5;
-        }
-
-        .call-btn {
-            width: 96px;
-            height: 96px;
-            border-radius: 50%;
-            border: none;
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 20px rgba(34, 197, 94, 0.4);
-        }
-
-        .call-btn:hover {
-            transform: scale(1.08);
-            box-shadow: 0 6px 28px rgba(34, 197, 94, 0.5);
-        }
-
-        .call-btn:active {
-            transform: scale(0.96);
-        }
-
-        .call-btn svg {
-            width: 40px;
-            height: 40px;
-            fill: #fff;
-        }
-
-        .call-btn.active {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-            animation: pulse 1.5s ease-in-out infinite;
-        }
-
-        .call-btn.active:hover {
-            box-shadow: 0 6px 28px rgba(239, 68, 68, 0.5);
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-            }
-
-            50% {
-                box-shadow: 0 4px 32px rgba(239, 68, 68, 0.6);
-            }
-        }
-
-        .btn-label {
-            font-size: 14px;
-            color: #64748b;
-            font-weight: 500;
-        }
-
-        .status {
-            margin-top: 28px;
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            display: none;
-        }
-
-        .status.connecting {
-            display: block;
-            background: #fef3c7;
-            color: #92400e;
-        }
-
-        .status.connected {
-            display: block;
-            background: #dcfce7;
-            color: #166534;
-        }
-
-        .status.error {
-            display: block;
-            background: #fee2e2;
-            color: #991b1b;
-        }
-
-        .transcript {
-            margin-top: 20px;
-            text-align: left;
-            max-height: 240px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .transcript.show {
-            display: block;
-        }
-
-        .transcript-msg {
-            padding: 10px 14px;
-            border-radius: 12px;
-            margin-bottom: 8px;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px);
             font-size: 13px;
-            line-height: 1.5;
-            max-width: 85%;
+            font-weight: 600;
+            color: var(--accent-primary);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
-        .transcript-msg.assistant {
-            background: #eff6ff;
-            color: #1e40af;
-            margin-right: auto;
+        /* Industry Nav Tabs */
+        .industry-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            padding: 8px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-glass);
+            border-radius: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            max-width: 100%;
         }
 
-        .transcript-msg.user {
-            background: #f0fdf4;
-            color: #166534;
-            margin-left: auto;
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 30px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .volume-bar {
-            margin-top: 16px;
-            height: 4px;
-            background: #e2e8f0;
-            border-radius: 4px;
+        .nav-btn:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .nav-btn.active {
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 4px 20px var(--glow-color);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Main Showcase Layout */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            width: 100%;
+        }
+
+        @media (max-width: 900px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Glassmorphic Cards */
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            backdrop-filter: blur(24px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
             overflow: hidden;
-            display: none;
+            transition: border-color 0.5s ease;
         }
 
-        .volume-bar.show {
-            display: block;
+        /* Hero Agent Card */
+        .agent-hero {
+            align-items: center;
+            text-align: center;
+            gap: 24px;
         }
 
-        .volume-fill {
+        .agent-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .agent-title {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+
+        .agent-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 480px;
+            line-height: 1.6;
+        }
+
+        /* Futuristic Voice Orb Visualizer */
+        .orb-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 12px 0;
+        }
+
+        .orb-ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            opacity: 0.2;
+            animation: pulse-ring 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .ring-1 { width: 100%; height: 100%; animation-delay: 0s; }
+        .ring-2 { width: 130%; height: 130%; animation-delay: 0.8s; opacity: 0.12; }
+        .ring-3 { width: 160%; height: 160%; animation-delay: 1.6s; opacity: 0.06; }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(0.85); opacity: 0.3; }
+            50% { transform: scale(1.15); opacity: 0.6; }
+            100% { transform: scale(0.85); opacity: 0.3; }
+        }
+
+        .voice-orb {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: var(--accent-gradient);
+            box-shadow: 0 0 60px var(--glow-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 4px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .voice-orb:hover {
+            transform: scale(1.06);
+            box-shadow: 0 0 80px var(--glow-color);
+        }
+
+        .voice-orb.active {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            box-shadow: 0 0 80px rgba(239, 68, 68, 0.6);
+            animation: active-glow 1.2s ease-in-out infinite alternate;
+        }
+
+        @keyframes active-glow {
+            0% { transform: scale(1); box-shadow: 0 0 40px rgba(239, 68, 68, 0.5); }
+            100% { transform: scale(1.08); box-shadow: 0 0 80px rgba(239, 68, 68, 0.8); }
+        }
+
+        .orb-icon {
+            font-size: 48px;
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+
+        /* Call Action Button */
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 32px;
+            border-radius: 40px;
+            border: none;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 30px var(--glow-color);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px var(--glow-color);
+        }
+
+        .action-btn.active {
+            background: linear-gradient(135deg, #ef4444, #b91c1c);
+            box-shadow: 0 8px 30px rgba(239, 68, 68, 0.5);
+        }
+
+        /* Live Status Bar */
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #64748b;
+        }
+
+        .status-pill.connecting .status-dot { background: #f59e0b; box-shadow: 0 0 10px #f59e0b; animation: blink 1s infinite; }
+        .status-pill.connected .status-dot { background: #10b981; box-shadow: 0 0 10px #10b981; }
+        .status-pill.speaking .status-dot { background: #06b6d4; box-shadow: 0 0 10px #06b6d4; animation: blink 0.6s infinite; }
+        .status-pill.error .status-dot { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* Audio Volume Fill */
+        .volume-container {
+            width: 100%;
+            max-width: 320px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .volume-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, #22c55e, #16a34a);
-            border-radius: 4px;
-            transition: width 0.1s;
+            background: var(--accent-gradient);
+            border-radius: 10px;
+            transition: width 0.1s ease-out;
         }
 
-        .features {
+        /* Quick Prompt Chips */
+        .quick-prompts-section {
+            width: 100%;
+            text-align: left;
+            margin-top: 8px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .chips-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .prompt-chip {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 8px 14px;
+            font-size: 12px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .prompt-chip:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            border-color: var(--accent-primary);
+        }
+
+        /* Right Panel: Live Transcript & Call Metrics */
+        .dashboard-panel {
+            gap: 20px;
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-glass);
+        }
+
+        .panel-title {
+            font-size: 16px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Real-Time Transcript Window */
+        .transcript-window {
+            height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-right: 6px;
+        }
+
+        .transcript-window::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .transcript-window::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+        }
+
+        .chat-bubble {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            max-width: 88%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            font-size: 13px;
+            line-height: 1.5;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+        .chat-bubble.assistant {
+            align-self: flex-start;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-bubble.user {
+            align-self: flex-end;
+            background: var(--accent-gradient);
+            color: #ffffff;
+            border-bottom-right-radius: 4px;
+        }
+
+        .bubble-role {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            opacity: 0.7;
+        }
+
+        /* Live Metrics Cards Grid */
+        .metrics-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .metric-title {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge-hot { color: #f43f5e; }
+        .badge-warm { color: #f59e0b; }
+        .badge-cold { color: #3b82f6; }
+
+        /* Features List Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            width: 100%;
+        }
+
+        .feature-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover {
+            background: rgba(255, 255, 255, 0.07);
+            transform: translateY(-2px);
+        }
+
+        .feature-box-icon { font-size: 20px; }
+        .feature-box-text { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+
+        /* Settings Bar & Modal */
+        .top-tools {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            display: flex;
             gap: 12px;
-            margin-top: 24px;
         }
 
-        .feature {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 16px 12px;
-            text-align: center;
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 6px;
+        .icon-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
         }
 
-        .feature-text {
-            font-size: 12px;
-            color: #475569;
-            font-weight: 500;
+        /* Modal Drawer */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        .powered {
-            margin-top: 32px;
-            font-size: 12px;
-            color: #94a3b8;
+        .modal-card {
+            background: #0f172a;
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            width: 100%;
+            max-width: 520px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-title { font-size: 20px; font-weight: 800; }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+        
+        .form-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px 14px;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            outline: none;
+        }
+
+        .form-input:focus { border-color: var(--accent-primary); }
+
+        .modal-save-btn {
+            padding: 12px;
+            border-radius: var(--radius-md);
+            border: none;
+            background: var(--accent-gradient);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="logo">
-                <svg viewBox="0 0 24 24">
-                    <path
-                        d="M12 2C9.24 2 7 4.24 7 7v2H6a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-9a2 2 0 0 0-2-2h-1V7c0-2.76-2.24-5-5-5zm-1.5 3.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5V9h-3V5.5zM12 17a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" />
-                </svg>
+    <!-- Dynamic Glowing Background Blobs -->
+    <div class="bg-blob blob-1" id="blob1"></div>
+    <div class="bg-blob blob-2" id="blob2"></div>
+
+    <div class="top-tools">
+        <button class="icon-btn" onclick="openSettingsModal()" title="Configure Vapi API Keys">⚙️</button>
+    </div>
+
+    <div class="app-wrapper">
+        <!-- Header Section -->
+        <header>
+            <div class="brand-badge" id="industryBadge">
+                ✨ Universal AI Voice Showcase
             </div>
-            <h1 id="clinicName">Multilingual Assistant</h1>
-            <p class="subtitle">ABC Medical Center — Talk to our AI Assistant for appointments, primary care, and specialty consultations</p>
+            
+            <!-- Industry Selector Pills -->
+            <nav class="industry-nav">
+                <button class="nav-btn active" onclick="switchIndustry('medical')" id="btn-medical">
+                    <span>🩺</span> Medical & Dental
+                </button>
+                <button class="nav-btn" onclick="switchIndustry('homeservices')" id="btn-homeservices">
+                    <span>🛠️</span> Home Services
+                </button>
+                <button class="nav-btn" onclick="switchIndustry('restaurant')" id="btn-restaurant">
+                    <span>🍽️</span> Restaurant & Lounge
+                </button>
+                <button class="nav-btn" onclick="switchIndustry('cardealership')" id="btn-cardealership">
+                    <span>🚗</span> Car Dealership
+                </button>
+                <button class="nav-btn" onclick="switchIndustry('general')" id="btn-general">
+                    <span>🏢</span> General Business
+                </button>
+            </nav>
+        </header>
 
-            <button class="call-btn" id="callBtn" onclick="toggleCall()">
-                <svg id="phoneIcon" viewBox="0 0 24 24">
-                    <path
-                        d="M6.62 10.79a15.05 15.05 0 0 0 6.59 6.59l2.2-2.2a1 1 0 0 1 1.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 0 1 1 1v3.49a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.24.2 2.45.57 3.57a1 1 0 0 1-.25 1.02l-2.2 2.2z" />
-                </svg>
-                <svg id="endIcon" viewBox="0 0 24 24" style="display:none">
-                    <path
-                        d="M12 9c-1.6 0-3.15.25-4.6.72v3.28c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08a.956.956 0 0 1 0-1.36C3.57 8.55 7.58 7 12 7s8.43 1.55 11.71 4.72c.18.18.29.44.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.1-.7-.28-.79-.73-1.68-1.36-2.66-1.85a.994.994 0 0 1-.56-.9V9.72C14.15 9.25 13.6 9 12 9z" />
-                </svg>
-            </button>
-            <p class="btn-label" id="btnLabel">Tap to start call</p>
+        <!-- Main Showcase Grid -->
+        <div class="main-grid">
+            <!-- Left Card: AI Agent Hero Voice Call -->
+            <div class="glass-card agent-hero" id="mainCard">
+                <div class="agent-info">
+                    <h1 class="agent-title" id="agentTitle">ApexCare Medical Center</h1>
+                    <p class="agent-subtitle" id="agentSubtitle">
+                        Doctor consultations, dental checkups, slot availability & emergency care triage
+                    </p>
+                </div>
 
-            <div class="volume-bar" id="volumeBar">
-                <div class="volume-fill" id="volumeFill"></div>
+                <!-- Glowing Futuristic AI Orb -->
+                <div class="orb-container">
+                    <div class="orb-ring ring-1"></div>
+                    <div class="orb-ring ring-2"></div>
+                    <div class="orb-ring ring-3"></div>
+                    <div class="voice-orb" id="voiceOrb" onclick="toggleCall()">
+                        <div class="orb-icon" id="orbIcon">🎙️</div>
+                    </div>
+                </div>
+
+                <!-- Call Button & Live Status -->
+                <button class="action-btn" id="callBtn" onclick="toggleCall()">
+                    <span id="callBtnIcon">📞</span>
+                    <span id="callBtnText">Start AI Voice Call</span>
+                </button>
+
+                <div class="status-pill" id="statusPill">
+                    <div class="status-dot"></div>
+                    <span id="statusText">Ready to connect</span>
+                </div>
+
+                <!-- Mic Audio Level Bar -->
+                <div class="volume-container">
+                    <div class="volume-bar-fill" id="volumeFill"></div>
+                </div>
+
+                <!-- Features Grid -->
+                <div class="features-grid" id="featuresGrid">
+                    <!-- Features populated dynamically -->
+                </div>
+
+                <!-- Sample Scenario Quick Chips -->
+                <div class="quick-prompts-section">
+                    <div class="section-label">💡 Sample Conversation Starters</div>
+                    <div class="chips-container" id="chipsContainer">
+                        <!-- Chips populated dynamically -->
+                    </div>
+                </div>
             </div>
 
-            <div class="status" id="status"></div>
+            <!-- Right Card: Live Transcript & Real-Time Call Intelligence -->
+            <div class="glass-card dashboard-panel">
+                <div class="panel-header">
+                    <div class="panel-title">
+                        <span>💬</span> Live Transcript & Intelligence
+                    </div>
+                    <div class="status-pill" style="padding: 4px 12px; font-size: 11px;">
+                        <span>⚡ AI Sync Active</span>
+                    </div>
+                </div>
 
-            <div class="transcript" id="transcript"></div>
+                <!-- Live Chat Bubbles Stream -->
+                <div class="transcript-window" id="transcriptWindow">
+                    <div class="chat-bubble assistant">
+                        <span class="bubble-role">AI Receptionist</span>
+                        Click "Start AI Voice Call" to begin real-time voice conversation with our multi-industry AI agent.
+                    </div>
+                </div>
 
-            <div class="features">
-                <div class="feature">
-                    <div class="feature-icon">🩺</div>
-                    <div class="feature-text">Primary Care</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">📅</div>
-                    <div class="feature-text">Book Appointment</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">⏰</div>
-                    <div class="feature-text">Check Availability</div>
-                </div>
-                <div class="feature">
-                    <div class="feature-icon">🌐</div>
-                    <div class="feature-text">Multilingual</div>
+                <!-- Live Metrics Grid -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <span class="metric-title">Lead Qualification</span>
+                        <span class="metric-value" id="metricQualification">
+                            <span class="badge-warm">⚡ WARM</span>
+                        </span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">Detected Language</span>
+                        <span class="metric-value" id="metricLanguage">🌐 English / Auto</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">Tool Executions</span>
+                        <span class="metric-value" id="metricTools">⚡ 0 Calls</span>
+                    </div>
+                    <div class="metric-card">
+                        <span class="metric-title">Call Duration</span>
+                        <span class="metric-value" id="metricTimer">⏱️ 00:00</span>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <p class="powered">Powered by AI Voice Assistant</p>
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal-card">
+            <h2 class="modal-title">⚙️ Vapi Credentials Configuration</h2>
+            <p style="font-size: 13px; color: var(--text-secondary);">
+                Configure your Vapi Public Key and optional custom Assistant ID. Saved securely in local storage.
+            </p>
+            <div class="form-group">
+                <label class="form-label">Vapi Public Key</label>
+                <input type="text" class="form-input" id="cfgPublicKey" placeholder="e4257f6c-fc6a-4269-90eb-82916bc89414">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Assistant ID (Default / Universal)</label>
+                <input type="text" class="form-input" id="cfgAssistantId" placeholder="f84a52d3-01f8-478c-a224-7efaa894d94e">
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
+                <button class="modal-save-btn" style="background: rgba(255,255,255,0.1);" onclick="closeSettingsModal()">Cancel</button>
+                <button class="modal-save-btn" onclick="saveSettings()">Save Configuration</button>
+            </div>
+        </div>
     </div>
 
     <script type="module">
         import Vapi from "https://esm.sh/@vapi-ai/web";
-        // =====================================================
-        //  CONFIGURE THESE VALUES
-        // =====================================================
-        const VAPI_PUBLIC_KEY = "e4257f6c-fc6a-4269-90eb-82916bc89414";      // Vapi Dashboard → Account → Public Key
-        const VAPI_ASSISTANT_ID = "f84a52d3-01f8-478c-a224-7efaa894d94e";  // Vapi Dashboard → Assistant → ID
-        // =====================================================
 
-        const vapi = new Vapi(VAPI_PUBLIC_KEY);
+        // Default Configs
+        let VAPI_PUBLIC_KEY = localStorage.getItem("VAPI_PUBLIC_KEY") || "e4257f6c-fc6a-4269-90eb-82916bc89414";
+        let VAPI_ASSISTANT_ID = localStorage.getItem("VAPI_ASSISTANT_ID") || "f84a52d3-01f8-478c-a224-7efaa894d94e";
+
+        let currentIndustry = "medical";
+        let industryData = {};
+        let vapi = null;
         let isCallActive = false;
         let isConnecting = false;
+        let callTimerInterval = null;
+        let secondsElapsed = 0;
+        let toolExecutionCount = 0;
 
-        const callBtn = document.getElementById("callBtn");
-        const btnLabel = document.getElementById("btnLabel");
-        const phoneIcon = document.getElementById("phoneIcon");
-        const endIcon = document.getElementById("endIcon");
-        const statusEl = document.getElementById("status");
-        const transcriptEl = document.getElementById("transcript");
-        const volumeBar = document.getElementById("volumeBar");
-        const volumeFill = document.getElementById("volumeFill");
-
-        function setStatus(text, type) {
-            statusEl.textContent = text;
-            statusEl.className = "status " + type;
+        // Load Industry Config Data
+        async function loadIndustryData() {
+            try {
+                const res = await fetch("industry_prompts.json");
+                industryData = await res.json();
+                renderIndustry(currentIndustry);
+            } catch (err) {
+                console.error("Failed to load industry_prompts.json:", err);
+            }
         }
 
-        function addTranscript(role, text) {
-            transcriptEl.classList.add("show");
-            const msg = document.createElement("div");
-            msg.className = "transcript-msg " + role;
-            msg.textContent = text;
-            transcriptEl.appendChild(msg);
-            transcriptEl.scrollTop = transcriptEl.scrollHeight;
+        // Initialize Vapi SDK
+        function initVapi() {
+            try {
+                vapi = new Vapi(VAPI_PUBLIC_KEY);
+                setupVapiListeners();
+            } catch (err) {
+                console.error("Vapi init error:", err);
+            }
+        }
+
+        // Switch Industry Function
+        window.switchIndustry = function(indId) {
+            if (isCallActive || isConnecting) {
+                if (!confirm("Changing industry persona will end your current call. Continue?")) return;
+                stopCall();
+            }
+            currentIndustry = indId;
+            
+            // Update active buttons
+            document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+            const activeBtn = document.getElementById("btn-" + indId);
+            if (activeBtn) activeBtn.classList.add("active");
+
+            renderIndustry(indId);
+        };
+
+        function renderIndustry(indId) {
+            const data = industryData[indId];
+            if (!data) return;
+
+            // Update Root CSS variables for Dynamic Theming
+            document.documentElement.style.setProperty("--accent-primary", data.accentColor);
+            document.documentElement.style.setProperty("--accent-gradient", data.gradient);
+            document.documentElement.style.setProperty("--glow-color", data.accentColor + "55");
+
+            // Update Header & Hero elements
+            document.getElementById("industryBadge").innerHTML = `${data.icon} ${data.badge}`;
+            document.getElementById("agentTitle").textContent = data.title;
+            document.getElementById("agentSubtitle").textContent = data.subtitle;
+            document.getElementById("orbIcon").textContent = data.icon;
+
+            // Render Features Grid
+            const featGrid = document.getElementById("featuresGrid");
+            featGrid.innerHTML = data.features.map(f => `
+                <div class="feature-box">
+                    <span class="feature-box-icon">${f.icon}</span>
+                    <span class="feature-box-text">${f.text}</span>
+                </div>
+            `).join('');
+
+            // Render Quick Prompt Chips
+            const chipsCont = document.getElementById("chipsContainer");
+            chipsCont.innerHTML = data.quickPrompts.map(prompt => `
+                <div class="prompt-chip" onclick="handlePromptChip('${prompt.replace(/'/g, "\\'")}')">
+                    "${prompt}"
+                </div>
+            `).join('');
+        }
+
+        window.handlePromptChip = function(text) {
+            if (!isCallActive) {
+                alert(`Start the AI Voice Call first! Once connected, you can say:\n\n"${text}"`);
+            } else {
+                addTranscript("user", text);
+            }
+        };
+
+        // Call Control Logic
+        window.toggleCall = function() {
+            if (isCallActive || isConnecting) {
+                stopCall();
+            } else {
+                startCall();
+            }
+        };
+
+        function startCall() {
+            if (!vapi) initVapi();
+            isConnecting = true;
+
+            const voiceOrb = document.getElementById("voiceOrb");
+            const callBtn = document.getElementById("callBtn");
+            const callBtnText = document.getElementById("callBtnText");
+            const callBtnIcon = document.getElementById("callBtnIcon");
+            const statusPill = document.getElementById("statusPill");
+            const statusText = document.getElementById("statusText");
+
+            voiceOrb.classList.add("active");
+            callBtn.classList.add("active");
+            callBtnText.textContent = "End Voice Call";
+            callBtnIcon.textContent = "🛑";
+            
+            statusPill.className = "status-pill connecting";
+            statusText.textContent = "Connecting to AI Agent...";
+
+            // Dynamically override Vapi assistant options with selected Industry System Prompt
+            const indData = industryData[currentIndustry];
+            const assistantOverrides = {
+                model: {
+                    provider: "openai",
+                    model: "gpt-4o-mini",
+                    messages: [
+                        {
+                            role: "system",
+                            content: indData ? indData.systemPrompt : ""
+                        }
+                    ]
+                }
+            };
+
+            try {
+                vapi.start(VAPI_ASSISTANT_ID, assistantOverrides);
+            } catch (e) {
+                console.error("Vapi Start Error:", e);
+                // Fallback start without overrides if needed
+                vapi.start(VAPI_ASSISTANT_ID);
+            }
+        }
+
+        function stopCall() {
+            if (vapi) vapi.stop();
+            handleCallEndState();
         }
 
         function handleCallEndState() {
             isCallActive = false;
             isConnecting = false;
+            clearInterval(callTimerInterval);
+
+            const voiceOrb = document.getElementById("voiceOrb");
+            const callBtn = document.getElementById("callBtn");
+            const callBtnText = document.getElementById("callBtnText");
+            const callBtnIcon = document.getElementById("callBtnIcon");
+            const statusPill = document.getElementById("statusPill");
+            const statusText = document.getElementById("statusText");
+            const volumeFill = document.getElementById("volumeFill");
+
+            voiceOrb.classList.remove("active");
             callBtn.classList.remove("active");
-            phoneIcon.style.display = "block";
-            endIcon.style.display = "none";
-            btnLabel.textContent = "Tap to start call";
-            volumeBar.classList.remove("show");
-            if (!statusEl.classList.contains("error")) {
-                statusEl.className = "status";
-            }
+            callBtnText.textContent = "Start AI Voice Call";
+            callBtnIcon.textContent = "📞";
+            
+            statusPill.className = "status-pill";
+            statusText.textContent = "Call Ended — Ready";
+            volumeFill.style.width = "0%";
         }
 
-        function toggleCall() {
-            if (isCallActive || isConnecting) {
-                vapi.stop();
+        function setupVapiListeners() {
+            vapi.on("call-start", () => {
+                isCallActive = true;
+                isConnecting = false;
+
+                const statusPill = document.getElementById("statusPill");
+                const statusText = document.getElementById("statusText");
+                statusPill.className = "status-pill connected";
+                statusText.textContent = "Connected — Speak now";
+
+                // Start Timer
+                secondsElapsed = 0;
+                toolExecutionCount = 0;
+                document.getElementById("metricTools").textContent = `⚡ 0 Calls`;
+                clearInterval(callTimerInterval);
+                callTimerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+                    const secs = String(secondsElapsed % 60).padStart(2, '0');
+                    document.getElementById("metricTimer").textContent = `⏱️ ${mins}:${secs}`;
+                }, 1000);
+
+                addTranscript("assistant", `Hello! Connected to ${industryData[currentIndustry]?.title}. How can I assist you?`);
+            });
+
+            vapi.on("call-end", () => {
                 handleCallEndState();
+            });
+
+            vapi.on("speech-start", () => {
+                const statusPill = document.getElementById("statusPill");
+                const statusText = document.getElementById("statusText");
+                statusPill.className = "status-pill speaking";
+                statusText.textContent = "AI Agent is speaking...";
+            });
+
+            vapi.on("speech-end", () => {
+                const statusPill = document.getElementById("statusPill");
+                const statusText = document.getElementById("statusText");
+                statusPill.className = "status-pill connected";
+                statusText.textContent = "Listening to caller...";
+            });
+
+            vapi.on("volume-level", (level) => {
+                const volumeFill = document.getElementById("volumeFill");
+                volumeFill.style.width = (level * 100) + "%";
+
+                // Sound reactive orb scaling
+                const voiceOrb = document.getElementById("voiceOrb");
+                if (isCallActive) {
+                    const scale = 1 + (level * 0.25);
+                    voiceOrb.style.transform = `scale(${scale})`;
+                }
+            });
+
+            vapi.on("message", (msg) => {
+                if (msg.type === "transcript" && msg.transcriptType === "final") {
+                    addTranscript(msg.role, msg.transcript);
+                    analyzeTranscriptIntent(msg.transcript);
+                }
+                if (msg.type === "tool-calls") {
+                    toolExecutionCount++;
+                    document.getElementById("metricTools").textContent = `⚡ ${toolExecutionCount} Tool Executed`;
+                }
+            });
+
+            vapi.on("error", (err) => {
+                console.error("Vapi Runtime Error:", err);
+                const statusPill = document.getElementById("statusPill");
+                const statusText = document.getElementById("statusText");
+                statusPill.className = "status-pill error";
+                statusText.textContent = "Connection Error";
+                handleCallEndState();
+            });
+        }
+
+        function addTranscript(role, text) {
+            const windowEl = document.getElementById("transcriptWindow");
+            const bubble = document.createElement("div");
+            bubble.className = "chat-bubble " + role;
+
+            const roleLabel = role === "assistant" ? "AI Receptionist" : "Caller";
+            bubble.innerHTML = `<span class="bubble-role">${roleLabel}</span>${text}`;
+
+            windowEl.appendChild(bubble);
+            windowEl.scrollTop = windowEl.scrollHeight;
+        }
+
+        function analyzeTranscriptIntent(text) {
+            const lower = text.toLowerCase();
+            const qualEl = document.getElementById("metricQualification");
+            const langEl = document.getElementById("metricLanguage");
+
+            // Simple language classification
+            if (/hola|gracias|cita|médica|por favor|buenos/i.test(lower)) {
+                langEl.textContent = "🇲🇽 Spanish Detected";
+            } else if (/namaste|shukriya|aap|kaise|chahiye/i.test(lower)) {
+                langEl.textContent = "🇮🇳 Hindi Detected";
             } else {
-                isConnecting = true;
+                langEl.textContent = "🇺🇸 English Detected";
+            }
 
-                // Immediately show connecting UI (turns red/active with end call button)
-                callBtn.classList.add("active");
-                phoneIcon.style.display = "none";
-                endIcon.style.display = "block";
-                btnLabel.textContent = "Tap to end call";
-                setStatus("Connecting...", "connecting");
-
-                vapi.start(VAPI_ASSISTANT_ID);
+            // Simple qualification classification
+            if (/urgent|emergency|pain|leak|today|immediately|book now/i.test(lower)) {
+                qualEl.innerHTML = `<span class="badge-hot">🔥 HOT LEAD</span>`;
+            } else if (/cost|price|appointment|tomorrow|available|reserve/i.test(lower)) {
+                qualEl.innerHTML = `<span class="badge-warm">⚡ WARM LEAD</span>`;
             }
         }
-        window.toggleCall = toggleCall;
 
-        vapi.on("call-start", () => {
-            isCallActive = true;
-            isConnecting = false;
-            volumeBar.classList.add("show");
-            setStatus("Connected — start speaking", "connected");
-        });
+        // Settings Modal Logic
+        window.openSettingsModal = function() {
+            document.getElementById("cfgPublicKey").value = VAPI_PUBLIC_KEY;
+            document.getElementById("cfgAssistantId").value = VAPI_ASSISTANT_ID;
+            document.getElementById("settingsModal").style.display = "flex";
+        };
 
-        vapi.on("call-end", () => {
-            handleCallEndState();
-        });
+        window.closeSettingsModal = function() {
+            document.getElementById("settingsModal").style.display = "none";
+        };
 
-        vapi.on("speech-start", () => {
-            setStatus("Assistant is speaking...", "connected");
-        });
-
-        vapi.on("speech-end", () => {
-            setStatus("Listening...", "connected");
-        });
-
-        vapi.on("volume-level", (level) => {
-            volumeFill.style.width = (level * 100) + "%";
-        });
-
-        vapi.on("message", (msg) => {
-            if (msg.type === "transcript") {
-                if (msg.transcriptType === "final") {
-                    addTranscript(msg.role, msg.transcript);
-                }
+        window.saveSettings = function() {
+            const pk = document.getElementById("cfgPublicKey").value.trim();
+            const aid = document.getElementById("cfgAssistantId").value.trim();
+            if (pk) {
+                VAPI_PUBLIC_KEY = pk;
+                localStorage.setItem("VAPI_PUBLIC_KEY", pk);
             }
-        });
+            if (aid) {
+                VAPI_ASSISTANT_ID = aid;
+                localStorage.setItem("VAPI_ASSISTANT_ID", aid);
+            }
+            closeSettingsModal();
+            initVapi();
+            alert("Settings Saved Successfully!");
+        };
 
-        vapi.on("error", (err) => {
-            console.error("Vapi error:", err);
-            setStatus("Connection error. Please try again.", "error");
-            handleCallEndState();
-            setTimeout(() => {
-                if (!isCallActive && !isConnecting) {
-                    statusEl.className = "status";
-                }
-            }, 3000);
-        });
+        // On Load
+        loadIndustryData();
+        initVapi();
     </script>
 </body>
 

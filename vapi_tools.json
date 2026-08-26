@@ -4,22 +4,31 @@
     "messages": [
       {
         "type": "request-start",
-        "content": "Let me check the available slots for you..."
+        "content": "Let me check available slots for you..."
       },
       {
         "type": "request-failed",
-        "content": "I'm sorry, I wasn't able to check availability right now. Can you try calling back in a few minutes?"
+        "content": "I'm sorry, I wasn't able to check availability right now. Please try again shortly."
       }
     ],
     "function": {
       "name": "checkAvailability",
-      "description": "Check available appointment slots for a specific date at the dental clinic",
+      "description": "Check available slots/tables/appointments for a specific date across any business industry (Medical, Home Services, Restaurant, Car Dealership, General Business).",
       "parameters": {
         "type": "object",
         "properties": {
           "date": {
             "type": "string",
             "description": "The date to check availability for, in YYYY-MM-DD format"
+          },
+          "industry": {
+            "type": "string",
+            "enum": ["medical", "homeservices", "restaurant", "cardealership", "general"],
+            "description": "The industry category of the inquiry"
+          },
+          "service_type": {
+            "type": "string",
+            "description": "Specific service requested e.g. Dental Checkup, Plumbing Repair, Table for 4, Test Drive, General Consultation"
           }
         },
         "required": ["date"]
@@ -39,22 +48,22 @@
       },
       {
         "type": "request-failed",
-        "content": "I'm sorry, I couldn't complete the booking. Let me save your details and our team will call you back to confirm."
+        "content": "I'm sorry, I couldn't complete the booking. Let me save your details for immediate team follow-up."
       }
     ],
     "function": {
       "name": "bookAppointment",
-      "description": "Book a dental appointment for the caller on a specific date and time",
+      "description": "Book an appointment, service visit, table reservation, or test drive for the caller.",
       "parameters": {
         "type": "object",
         "properties": {
-          "patientName": {
+          "customerName": {
             "type": "string",
-            "description": "Full name of the patient"
+            "description": "Full name of the caller/customer/patient"
           },
           "phoneNumber": {
             "type": "string",
-            "description": "Contact phone number of the patient"
+            "description": "Contact phone number of the caller"
           },
           "date": {
             "type": "string",
@@ -62,18 +71,23 @@
           },
           "time": {
             "type": "string",
-            "description": "Appointment time in HH:MM format (24-hour)"
+            "description": "Appointment time e.g. 10:30 AM or 14:00"
           },
-          "treatment": {
+          "serviceName": {
             "type": "string",
-            "description": "Type of dental treatment or reason for visit"
+            "description": "Type of service e.g. Tooth ache cleaning, Plumbing leak repair, Patio Table Reservation, SUV Test Drive"
           },
-          "isNewPatient": {
-            "type": "boolean",
-            "description": "Whether this is a new patient or returning patient"
+          "industry": {
+            "type": "string",
+            "enum": ["medical", "homeservices", "restaurant", "cardealership", "general"],
+            "description": "The industry category"
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional notes, party size, address, or vehicle details"
           }
         },
-        "required": ["patientName", "phoneNumber", "date", "time", "treatment"]
+        "required": ["customerName", "phoneNumber", "date", "time", "serviceName"]
       }
     },
     "server": {
@@ -86,20 +100,20 @@
     "messages": [
       {
         "type": "request-start",
-        "content": "Let me save your details..."
+        "content": "Saving your details..."
       },
       {
         "type": "request-failed",
-        "content": "I apologize, I had trouble saving your information. Could you please call back?"
+        "content": "I had trouble saving your information. Could you please repeat your details?"
       }
     ],
     "function": {
       "name": "saveLeadInfo",
-      "description": "Save the caller's information and lead qualification details for follow-up",
+      "description": "Save caller details, lead qualification, and request info for callback follow-up.",
       "parameters": {
         "type": "object",
         "properties": {
-          "patientName": {
+          "customerName": {
             "type": "string",
             "description": "Full name of the caller"
           },
@@ -107,30 +121,31 @@
             "type": "string",
             "description": "Contact phone number"
           },
-          "treatment": {
+          "industry": {
             "type": "string",
-            "description": "Treatment or service they are interested in"
+            "enum": ["medical", "homeservices", "restaurant", "cardealership", "general"],
+            "description": "Industry persona"
+          },
+          "serviceName": {
+            "type": "string",
+            "description": "Service or product inquired about"
           },
           "urgency": {
             "type": "string",
             "enum": ["urgent", "routine", "just_enquiry"],
-            "description": "How urgent their need is"
+            "description": "Urgency level of the request"
           },
           "leadScore": {
             "type": "string",
             "enum": ["hot", "warm", "cold"],
-            "description": "Lead qualification score based on conversation"
-          },
-          "isNewPatient": {
-            "type": "boolean",
-            "description": "Whether this is a new or returning patient"
+            "description": "Lead score based on intent"
           },
           "notes": {
             "type": "string",
-            "description": "Any additional notes from the conversation"
+            "description": "Summary notes or custom address/special requests"
           }
         },
-        "required": ["patientName", "phoneNumber", "treatment", "leadScore"]
+        "required": ["customerName", "phoneNumber", "serviceName", "leadScore"]
       }
     },
     "server": {
