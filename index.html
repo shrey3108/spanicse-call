@@ -878,6 +878,9 @@
             const firstGreeting = indData ? `Hello! Thank you for calling ${indData.title}. How can I help you today?` : undefined;
             const assistantOverrides = {
                 firstMessage: firstGreeting,
+                variableValues: {
+                    industry: indData ? indData.title : 'General'
+                },
                 model: {
                     provider: "openai",
                     model: "gpt-4o-mini",
