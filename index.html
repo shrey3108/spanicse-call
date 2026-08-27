@@ -624,9 +624,6 @@
     <div class="bg-blob blob-1" id="blob1"></div>
     <div class="bg-blob blob-2" id="blob2"></div>
 
-    <div class="top-tools">
-        <button class="icon-btn" onclick="openSettingsModal()" title="Configure Vapi API Keys">⚙️</button>
-    </div>
 
     <div class="app-wrapper">
         <!-- Header Section -->
@@ -753,27 +750,6 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
-    <div class="modal-overlay" id="settingsModal">
-        <div class="modal-card">
-            <h2 class="modal-title">⚙️ Vapi Credentials Configuration</h2>
-            <p style="font-size: 13px; color: var(--text-secondary);">
-                Configure your Vapi Public Key and optional custom Assistant ID. Saved securely in local storage.
-            </p>
-            <div class="form-group">
-                <label class="form-label">Vapi Public Key</label>
-                <input type="text" class="form-input" id="cfgPublicKey" placeholder="e4257f6c-fc6a-4269-90eb-82916bc89414">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Assistant ID (Default / Universal)</label>
-                <input type="text" class="form-input" id="cfgAssistantId" placeholder="f84a52d3-01f8-478c-a224-7efaa894d94e">
-            </div>
-            <div style="display: flex; gap: 10px; justify-content: flex-end; margin-top: 10px;">
-                <button class="modal-save-btn" style="background: rgba(255,255,255,0.1);" onclick="closeSettingsModal()">Cancel</button>
-                <button class="modal-save-btn" onclick="saveSettings()">Save Configuration</button>
-            </div>
-        </div>
-    </div>
 
     <script type="module">
         import Vapi from "https://esm.sh/@vapi-ai/web";
