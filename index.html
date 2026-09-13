@@ -108,6 +108,96 @@
             transition: all 0.3s ease;
         }
 
+        .header-top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1100px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .sheet-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 30px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            backdrop-filter: blur(12px);
+            font-size: 13px;
+            font-weight: 600;
+            color: #34d399;
+            text-decoration: none;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sheet-btn:hover {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: #34d399;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.3);
+            color: #ffffff;
+        }
+
+        .sheet-card-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 14px;
+            padding: 12px 18px;
+            border-radius: var(--radius-lg);
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(6, 182, 212, 0.1));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sheet-card-cta:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+            border-color: #34d399;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+
+        .sheet-cta-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .sheet-cta-icon {
+            font-size: 22px;
+        }
+
+        .sheet-cta-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #34d399;
+        }
+
+        .sheet-cta-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .sheet-cta-arrow {
+            font-size: 12px;
+            font-weight: 600;
+            color: #34d399;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
         /* Industry Nav Tabs */
         .industry-nav {
             display: flex;
@@ -628,8 +718,13 @@
     <div class="app-wrapper">
         <!-- Header Section -->
         <header>
-            <div class="brand-badge" id="industryBadge">
-                ✨ Universal AI Voice Showcase
+            <div class="header-top-row">
+                <div class="brand-badge" id="industryBadge">
+                    ✨ Universal AI Voice Showcase
+                </div>
+                <a href="https://docs.google.com/spreadsheets/d/1UqmU0bBGhPsHKjOD6G1DYnt-Ds3tDnAzNUHmmQb12iI/edit#gid=0" target="_blank" rel="noopener noreferrer" class="sheet-btn" id="sheetBtn">
+                    <span>📊</span> View Live Google Sheet CRM ↗
+                </a>
             </div>
             
             <!-- Industry Selector Pills -->
@@ -746,6 +841,18 @@
                         <span class="metric-value" id="metricTimer">⏱️ 00:00</span>
                     </div>
                 </div>
+
+                <!-- Live Google Sheet CTA Card -->
+                <a href="https://docs.google.com/spreadsheets/d/1UqmU0bBGhPsHKjOD6G1DYnt-Ds3tDnAzNUHmmQb12iI/edit#gid=0" target="_blank" rel="noopener noreferrer" class="sheet-card-cta">
+                    <div class="sheet-cta-left">
+                        <span class="sheet-cta-icon">📊</span>
+                        <div>
+                            <div class="sheet-cta-title">Live Bookings & Leads (Google Sheet)</div>
+                            <div class="sheet-cta-subtitle">Watch new rows & appointments sync in real time via n8n</div>
+                        </div>
+                    </div>
+                    <span class="sheet-cta-arrow">Open Sheet ↗</span>
+                </a>
             </div>
         </div>
     </div>
