@@ -876,10 +876,25 @@
             // Dynamically override Vapi assistant options with selected Industry System Prompt & First Message Greeting
             const indData = industryData[currentIndustry];
             const firstGreeting = indData ? `Hello! Thank you for calling ${indData.title}. How can I help you today?` : undefined;
+
+            // Real-Time Calendar Grounding for dynamic "today" and "tomorrow" (kal) calculation
+            const now = new Date();
+            const todayStr = now.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kolkata' });
+            const todayISO = now.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+            const tomorrow = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+            const tomorrowStr = tomorrow.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Kolkata' });
+            const tomorrowISO = tomorrow.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+
+            const dateGroundingPrompt = `\n\n# REAL-TIME CALENDAR GROUNDING (STRICT):\n- TODAY'S EXACT DATE: ${todayStr} (${todayISO})\n- TOMORROW'S EXACT DATE: ${tomorrowStr} (${tomorrowISO})\n- CURRENT YEAR: ${now.getFullYear()}\n- INSTRUCTION: When caller mentions relative dates like "today" or "aaj", you MUST use date "${todayISO}". When caller mentions "tomorrow" or "kal", you MUST use date "${tomorrowISO}". NEVER use past years like 2023 or 2024. Always pass dates in YYYY-MM-DD format using current year ${now.getFullYear()}.\n`;
+
+            const fullSystemPrompt = (indData ? indData.systemPrompt : "") + dateGroundingPrompt;
+
             const assistantOverrides = {
                 firstMessage: firstGreeting,
                 variableValues: {
-                    industry: indData ? indData.title : 'General'
+                    industry: indData ? indData.title : 'General',
+                    currentDate: todayISO,
+                    tomorrowDate: tomorrowISO
                 },
                 model: {
                     provider: "openai",
@@ -887,7 +902,7 @@
                     messages: [
                         {
                             role: "system",
-                            content: indData ? indData.systemPrompt : ""
+                            content: fullSystemPrompt
                         }
                     ]
                 }
